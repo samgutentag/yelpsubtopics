@@ -48,7 +48,7 @@ reviews_df['text'] = reviews_df['text'].str.replace(',', ' ')
 #-------------------------------------------------------------------------------
 time_marker(text='Writing to files...')
 
-for year in reviews_df.date.dt.year.unique()):
+for year in reviews_df.date.dt.year.unique():
     df = reviews_df[reviews_df.date.dt.year == year].copy()
     df.reset_index(inplace=True, drop=True)
 
