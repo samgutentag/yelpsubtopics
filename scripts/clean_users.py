@@ -3,7 +3,7 @@ import pandas as pd
 import datetime
 import json
 
-DRY_RUN = True
+DRY_RUN = False
 
 day_labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
@@ -94,17 +94,15 @@ users.columns = orig_columns + ['elite_{}'.format(x) for x in elite_cols]
 #-------------------------------------------------------------------------------
 time_marker(text='Writing to files...')
 
-for rating in biz_df.stars.unique():
-    df = users[users.stars == rating].copy()
-    df.reset_index(inplace=True, drop=True)
+users.reset_index(inplace=True, drop=True)
 
-    file_name = '../clean_data/users/{}_star_business_clean.csv'.format(rating)
+file_name = '../clean_data/users/users_clean.csv'.format(rating)
 
-    if DRY_RUN:
-        time_marker(text='DRY RUN - Not Writing {}'.format(file_name))
-    else:
-        time_marker(text='Writing {}'.format(file_name))
-        df.to_csv(file_name, encoding='utf-8')
+if DRY_RUN:
+    time_marker(text='DRY RUN - Not Writing {}'.format(file_name))
+else:
+    time_marker(text='Writing {}'.format(file_name))
+    users.to_csv(file_name, encoding='utf-8')
 
 
 #-------------------------------------------------------------------------------
