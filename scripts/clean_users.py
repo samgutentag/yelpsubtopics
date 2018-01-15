@@ -25,9 +25,9 @@ def unpack(df, column, fillna=None):
 time_marker(text='Loading User Data...')
 
 data = pd.DataFrame()
-source_data_file = '../source_data/users.json'
+source_data_file = '../source_data/user.json'
 
-biz_list = []
+user_list = []
 for line in open(source_data_file, 'r'):
     user_list.append(json.loads(line))
 
@@ -65,7 +65,7 @@ users.drop(['friends'], axis=1, inplace=True)
 
 
 #-------------------------------------------------------------------------------
-time_marker(text='calculate yelper_age friend count...')
+time_marker(text='calculate yelper_age column...')
 users['yelper_age'] = users.apply(lambda row: (users.yelping_since.max() - row.yelping_since).days,axis=1)
 
 
