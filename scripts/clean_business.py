@@ -92,6 +92,14 @@ biz_df = unpack(biz_df, 'attributes')
 
 
 #-------------------------------------------------------------------------------
+time_marker(text='one hot encode categories...')
+from sklearn.preprocessing import MultiLabelBinarizer
+mlb = MultiLabelBinarizer()
+biz_df = biz_df.join(pd.DataFrame(mlb.fit_transform(biz_df.pop('categories')),
+                          columns=mlb.classes_,
+                          index=biz_df.index))
+
+#-------------------------------------------------------------------------------
 time_marker(text='cleaning up and reset index...')
 biz_df.columns = [str(x).lower() for x in biz_df.columns]
 biz_df.reset_index(inplace=True, drop=True)
