@@ -31,7 +31,7 @@ biz_list = []
 for line in open(source_data_file, 'r'):
     biz_list.append(json.loads(line))
 
-time_marker(text='creting dataframe...')
+time_marker(text='creating dataframe...')
 biz_df = pd.DataFrame(biz_list)
 
 #-------------------------------------------------------------------------------
@@ -112,7 +112,7 @@ for rating in biz_df.stars.unique():
     df = biz_df[biz_df.stars == rating].copy()
     df.reset_index(inplace=True, drop=True)
 
-    file_name = '../clean_data/business/{}_star_business_clean.csv'.format(rating.replace('.',''))
+    file_name = '../clean_data/business/{}_star_business_clean.csv'.format(str(rating).replace('.',''))
     time_marker(text='Writing {} rated records file...'.format(rating))
     if DRY_RUN:
         pass
