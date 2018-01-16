@@ -5,8 +5,6 @@ import json
 
 DRY_RUN = False
 
-day_labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-
 def time_marker(text=''):
     print('[{}] {}'.format(datetime.datetime.now().time(), text.title()))
 
@@ -66,7 +64,8 @@ users.drop(['friends'], axis=1, inplace=True)
 
 #-------------------------------------------------------------------------------
 time_marker(text='calculate yelper_age column...')
-users['yelper_age'] = users.apply(lambda row: (users.yelping_since.max() - row.yelping_since).days,axis=1)
+min_age = users.yelping_since.max()
+users['yelper_age'] = users.apply(lambda row: (min_age - row.yelping_since).days,axis=1)
 
 
 #-------------------------------------------------------------------------------
@@ -79,7 +78,7 @@ num_elite_years = int(tmp.max().max()) - int(tmp.min().min()) + 1
 
 from sklearn.preprocessing import MultiLabelBinarizer
 mlb = MultiLabelBinarizer()
-users = users.join(pd.DataFrame(mlb.fit_transform(user_df.pop('elite')),
+users = users.join(pd.DataFrame(mlb.fit_transform(users.pop('elite')),
                                 columns=mlb.classes_,
                                 index=users.index))
 
@@ -96,7 +95,7 @@ time_marker(text='Writing to files...')
 
 users.reset_index(inplace=True, drop=True)
 
-file_name = '../clean_data/users/users_clean.csv'.format(rating)
+file_name = '../clean_data/users/users_clean.csv'
 
 if DRY_RUN:
     time_marker(text='DRY RUN - Not Writing {}'.format(file_name))
