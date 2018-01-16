@@ -65,6 +65,9 @@ users.drop(['friends'], axis=1, inplace=True)
 #-------------------------------------------------------------------------------
 time_marker(text='calculate yelper_age column...')
 min_age = users.yelping_since.max()
+
+if DRY_RUN:
+    print('\tYoungest Yelper Birthday {}'.format(min_age))
 users['yelper_age'] = users.apply(lambda row: (min_age - row.yelping_since).days,axis=1)
 
 
