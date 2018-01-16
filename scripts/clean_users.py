@@ -70,6 +70,9 @@ if DRY_RUN:
     print('\tYoungest Yelper Birthday {}'.format(min_age))
 users['yelper_age'] = users.apply(lambda row: (min_age - row.yelping_since).days,axis=1)
 
+if DRY_RUN:
+    print('\Oldest Yelper Age {}'.format(users.yelper_age.min()))
+
 
 #-------------------------------------------------------------------------------
 time_marker(text='One hot encoding elite status...')
