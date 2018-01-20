@@ -37,27 +37,45 @@ reviews_df = pd.DataFrame(reviews_list)
 time_marker(text='correcting data type...')
 reviews_df.date        = pd.to_datetime(reviews_df.date)
 
-
 #-------------------------------------------------------------------------------
-time_marker(text='sanitizing review text for csv...')
-reviews_df['text'] = reviews_df['text'].str.strip()
-reviews_df['text'] = reviews_df['text'].str.replace(',', ' ')
-
-
+time_marker('appending bid_prefix column...')
+reviews_df['bid_prefix'] = reviews_df.business_id.apply(lambda x: x[:1])
 
 #-------------------------------------------------------------------------------
 time_marker(text='Writing to files...')
+file_count = len(reviews_df.bid_prefix.unique())
 
-for year in reviews_df.date.dt.year.unique():
-    df = reviews_df[reviews_df.date.dt.year == year].copy()
+import string
+translator = str.maketrans('','', string.punctuation)
+
+for i, prefix in enumerate(sorted(reviews_df.bid_prefix.unique())):
+
+    # take subset of busineses and trim business_id_refix column
+    df = reviews_df[reviews_df.bid_prefix == prefix].iloc[:,:-1].copy()
+
+
+    # drop reviews with missing review text
+    time_marker('\tdrop reviews with missing review text...')
+    df = df[~df.text.isnull()].copy()
+
+    # lowercase text and remove puncutation
+    time_marker('\tlowercase text and remove puncutation...')
+    df['text'] = df['text'].apply(lambda text: text.translate(translator).lower())
+
+    # append text length columns
+    time_marker('\tappend text length columns ...')
+    df['review_length'] = df.text.str.len()
+
     df.reset_index(inplace=True, drop=True)
-
-    file_name = '../clean_data/reviews/{:d}_reviews_clean.csv'.format(year)
-    time_marker(text='Writing {:d} records file...'.format(year))
+    file_name = '../clean_data/reviews/{}_{}_reviews_clean.csv'.format(str(i).zfill(2), prefix)
+    time_marker(text='Writing {:d} records to file {}'.format(df.shape[0], file_name))
     if DRY_RUN:
         pass
     else:
         df.to_csv(file_name, encoding='utf-8')
+time_marker(text='Done!')
+
+
 
 
 #-------------------------------------------------------------------------------
