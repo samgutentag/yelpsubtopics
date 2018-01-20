@@ -3,7 +3,7 @@ import pandas as pd
 import datetime
 import json
 
-DRY_RUN = True
+DRY_RUN = False
 
 def time_marker(text=''):
     print('[{}] {}'.format(datetime.datetime.now().time(), text.lower()))
