@@ -37,9 +37,11 @@ reviews_df = pd.DataFrame(reviews_list)
 time_marker(text='correcting data type...')
 reviews_df.date        = pd.to_datetime(reviews_df.date)
 
+
 #-------------------------------------------------------------------------------
 time_marker('appending bid_prefix column...')
 reviews_df['bid_prefix'] = reviews_df.business_id.apply(lambda x: x[:1])
+
 
 #-------------------------------------------------------------------------------
 time_marker(text='Writing to files...')
@@ -74,8 +76,6 @@ for i, prefix in enumerate(sorted(reviews_df.bid_prefix.unique())):
     else:
         df.to_csv(file_name, encoding='utf-8')
 time_marker(text='Done!')
-
-
 
 
 #-------------------------------------------------------------------------------

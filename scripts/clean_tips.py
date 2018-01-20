@@ -18,29 +18,28 @@ tips_list = []
 for line in open(source_data_file, 'r'):
     tips_list.append(json.loads(line))
 
+
 #-------------------------------------------------------------------------------
 time_marker(text='creating dataframe...')
 tips_df = pd.DataFrame(tips_list)
+
 
 #-------------------------------------------------------------------------------
 time_marker(text='data type cleanup...')
 tips_df.date        = pd.to_datetime(tips_df.date)
 tips_df.likes       = tips_df.likes.astype('int')
 
+
 #-------------------------------------------------------------------------------
 time_marker(text='Calculating tip string length...')
 tips_df['tip_len'] = tips_df.text.str.len()
+
 
 #-------------------------------------------------------------------------------
 time_marker(text='sanitizing trip text...')
 import string
 translator = str.maketrans('','', string.punctuation)
 tips_df['text'] = tips_df['text'].apply(lambda text: text.translate(translator).lower())
-
-
-#-------------------------------------------------------------------------------
-time_marker('append business_id prefix column')
-tips_df['bid_prefix'] = tips_df.business_id.apply(lambda x: x[:1])
 
 
 #-------------------------------------------------------------------------------
@@ -53,6 +52,11 @@ for col in tips_df.columns:
 for col in tips_df.columns:
     print('\tNumber of Unique {} - {}'.format(col.ljust(max_col_length), str(len(tips_df[col].unique())).rjust(10)))
 print('')
+
+
+#-------------------------------------------------------------------------------
+time_marker('append business_id prefix column')
+tips_df['bid_prefix'] = tips_df.business_id.apply(lambda x: x[:1])
 
 
 #-------------------------------------------------------------------------------
@@ -70,6 +74,7 @@ for i, prefix in enumerate(sorted(tips_df.bid_prefix.unique())):
     else:
         df.to_csv(file_name, encoding='utf-8')
 time_marker(text='Done!')
+
 
 #-------------------------------------------------------------------------------
 time_marker(text='Complete!')
