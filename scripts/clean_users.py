@@ -55,7 +55,7 @@ for i, prefix in enumerate(sorted(friends.uid_prefix.unique())):
     df = friends[friends.uid_prefix == prefix].iloc[:,:-1].copy()
 
     df.reset_index(inplace=True, drop=True)
-    file_name = '../clean_data/users/{}_{}_friends_clean.csv'.format(str(i).zfill(2), prefix)
+    file_name = '../clean_data/friends/{}_{}_friends_clean.csv'.format(str(i).zfill(2), prefix)
     time_marker(text='Writing {:d} records to file {}'.format(df.shape[0], file_name))
     if DRY_RUN:
         pass
