@@ -8,7 +8,7 @@ DRY_RUN = False
 day_labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 def time_marker(text=''):
-    print('[{}] {}'.format(datetime.datetime.now().time(), text.title()))
+    print('[{}] {}'.format(datetime.datetime.now().time(), text.lower()))
 
 def unpack(df, column, fillna=None):
     ret = None
@@ -32,92 +32,133 @@ for line in open(source_data_file, 'r'):
     biz_list.append(json.loads(line))
 
 time_marker(text='creating dataframe...')
-biz_df = pd.DataFrame(biz_list)
+data = pd.DataFrame(biz_list)
+
+time_marker(text='set index to business_id...')
+data.set_index('business_id', inplace=True, drop=True)
+
+
+#-------------------------------------------------------------------------------
+if DRY_RUN:
+    data = data[:200].copy()
+
 
 #-------------------------------------------------------------------------------
 time_marker(text='collecting business Hours...')
-biz_hours = biz_df[['business_id', 'hours']].copy()
-biz_hours = pd.concat([biz_hours.drop(['hours'], axis=1), biz_hours['hours'].apply(pd.Series)], axis=1)
+hours = data[['hours']].copy()
 
+time_marker('splitting hours into individual columns...')
+hours = pd.concat([hours.drop(['hours'], axis=1), hours['hours'].apply(pd.Series)], axis=1)
 
-#-------------------------------------------------------------------------------
 time_marker(text='Split hours into open and close...')
-# split daily hours columnsinto '{DAY}_open' and '{DAY}_close'
-for col in biz_hours.columns[1:]:
+# split daily hours columns into '{DAY}_open' and '{DAY}_close'
+for col in hours.columns:
 
     # split hours column of [11:00-19:00] into '{original_name}_open' and '{original_name}_close' columns
-    biz_hours['{}_open'.format(col.lower())], biz_hours['{}_close'.format(col.lower())] = biz_hours[col].str.split('-', 1).str
+    hours['{}_open'.format(col.lower())]  = pd.to_datetime(hours[col].str.split('-', 1).str[0], format='%H:%M').dt.time
+    hours['{}_close'.format(col.lower())] = pd.to_datetime(hours[col].str.split('-', 1).str[1], format='%H:%M').dt.time
 
-    # split each open column into '{}_open_hour' and '{}_open_minute' columns
-    biz_hours['{}_open_hour'.format(col.lower())], biz_hours['{}_open_minute'.format(col.lower())] = biz_hours['{}_open'.format(col.lower())].str.split(':',1).str
+    # drop original day columns
+    hours.drop(col, axis=1, inplace=True)
 
-    # split each close column into '{}_open_hour' and '{}_open_minute' columns
-    biz_hours['{}_close_hour'.format(col.lower())], biz_hours['{}_close_minute'.format(col.lower())] = biz_hours['{}_close'.format(col.lower())].str.split(':',1).str
+time_marker('sorting day columns order...')
+cols = [['{}_open'.format(x.lower()), '{}_close'.format(x.lower())] for x in day_labels]
+ordered_cols = list()
+for day in cols:
+    for time in day:
+        ordered_cols.append(time)
 
-    # convert open_hour and open_minute to int, min/60 for fraction of hour
-    biz_hours['{}_open_hour'.format(col.lower())] = biz_hours['{}_open_hour'.format(col.lower())].astype('float')
-    biz_hours['{}_open_minute'.format(col.lower())] = biz_hours['{}_open_minute'.format(col.lower())].astype('float')/60.
+hours = hours[ordered_cols].copy()
 
-    # convert close_hour and close_minute to int, min/60 for fraction of hour
-    biz_hours['{}_close_hour'.format(col.lower())] = biz_hours['{}_close_hour'.format(col.lower())].astype('float')
-    biz_hours['{}_close_minute'.format(col.lower())] = biz_hours['{}_close_minute'.format(col.lower())].astype('float')/60.
-
-    # add back into hour of day as a fraction of hours in 24 hour clock i.e. 5:30pm -> 17.5
-    biz_hours['{}_open'.format(col.lower())] = biz_hours['{}_open_hour'.format(col.lower())] + biz_hours['{}_open_minute'.format(col.lower())]
-    biz_hours['{}_close'.format(col.lower())] = biz_hours['{}_close_hour'.format(col.lower())] + biz_hours['{}_close_minute'.format(col.lower())]
-
-    # drop our bits and pieces
-    drop_cols = ['{}_open_hour'.format(col.lower()),
-         '{}_open_minute'.format(col.lower()),
-         '{}_close_hour'.format(col.lower()),
-         '{}_close_minute'.format(col.lower())]
-    biz_hours.drop(drop_cols, axis=1, inplace=True)
-
-    # drop oroginal column
-    biz_hours.drop([col], inplace=True, axis=1)
-biz_hours.fillna(0, inplace=True)
-
-#-------------------------------------------------------------------------------
 # merge back to original data frame
 time_marker(text='merge open and close hours to business data...')
-biz_df = biz_df.merge(biz_hours, left_on='business_id', right_on='business_id')
+data = data.merge(hours, left_index=True, right_index=True)
 
-# drop original 'hours' column of lists
-biz_df.drop(['hours'], axis=1, inplace=True)
+data.drop(['hours'], axis=1, inplace=True)
 
 
 #-------------------------------------------------------------------------------
-time_marker(text='unpacking business attributes...')
-biz_df = unpack(biz_df, 'attributes')
+time_marker('collecting attributes columns...')
+attributes_df = data['attributes'].apply(pd.Series)
+attributes_df.columns = [str(x).lower() for x in attributes_df.columns]
+time_marker('done')
+
+time_marker('expanding attributes...')
+expandable_cols = ['businessparking','goodformeal','ambience','hairspecializesin','music','bestnights','dietaryrestrictions']
+
+for excol in [col for col in attributes_df.columns if col != 0]:
+    time_marker('\texpanding "{}"...'.format(excol))
+    df = attributes_df[excol].apply(pd.Series)
+    df.columns = ['{}_{}'.format(excol, str(x).lower()) for x in df.columns]
+
+    # append to attributes_df
+    attributes_df = attributes_df.merge(df, left_index=True, right_index=True)
+
+    # drop original column
+    attributes_df.drop([excol], axis=1, inplace=True)
+
+# if attribute column ends in '_0', trim it
+time_marker('trimming odd columns...')
+col_names = list()
+for col in attributes_df.columns:
+    if col.endswith('_0'):
+        col_names.append(col[:-2])
+    else:
+        col_names.append(col)
+# correct collumn names
+attributes_df.columns = col_names
+
+time_marker('dropping columns of all nan...')
+attributes_df=attributes_df.dropna(axis=1,how='all')
+
+
+#-------------------------------------------------------------------------------
+time_marker('merging attributes to main business dataframe...')
+data = data.merge(attributes_df, left_index=True, right_index=True)
+data.drop(['attributes'], axis=1, inplace=True)
+time_marker('done')
+data.head(3)
+
 
 
 #-------------------------------------------------------------------------------
 time_marker(text='one hot encode categories...')
 from sklearn.preprocessing import MultiLabelBinarizer
 mlb = MultiLabelBinarizer()
-biz_df = biz_df.join(pd.DataFrame(mlb.fit_transform(biz_df.pop('categories')),
+
+time_marker('one hot encoding of categories started...')
+data = data.join(pd.DataFrame(mlb.fit_transform(data.pop('categories')),
                           columns=mlb.classes_,
-                          index=biz_df.index))
+                          index=data.index))
+time_marker('complete!')
+
 
 #-------------------------------------------------------------------------------
 time_marker(text='cleaning up and reset index...')
-biz_df.columns = [str(x).lower() for x in biz_df.columns]
-biz_df.reset_index(inplace=True, drop=True)
+data.columns = [str(x).lower().replace(' ', '_') for x in data.columns]
+data.reset_index(inplace=True)
 
 
 #-------------------------------------------------------------------------------
-time_marker(text='Writing to files...')
+time_marker('append business_id prefix column')
+data['bid_prefix'] = data.business_id.apply(lambda x: x[:1])
 
-for rating in biz_df.stars.unique():
-    df = biz_df[biz_df.stars == rating].copy()
+
+#-------------------------------------------------------------------------------
+time_marker(text='Writing to file...')
+for i, prefix in enumerate(sorted(data.bid_prefix.unique())):
+
+    # take subset of busineses and trim business_id_refix column
+    df = data[data.bid_prefix == prefix].iloc[:,:-1].copy()
+
     df.reset_index(inplace=True, drop=True)
-
-    file_name = '../clean_data/business/{}_star_business_clean.csv'.format(str(rating).replace('.',''))
-    time_marker(text='Writing {} rated records file...'.format(rating))
+    file_name = '../clean_data/business/{}_{}_business_clean.csv'.format(str(i).zfill(2), prefix)
+    time_marker(text='Writing {:d} records to file {}'.format(df.shape[0], file_name))
     if DRY_RUN:
-        pass
+        print(df.head(5))
     else:
         df.to_csv(file_name, encoding='utf-8')
+time_marker(text='Done!')
 
 
 #-------------------------------------------------------------------------------
