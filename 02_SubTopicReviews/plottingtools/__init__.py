@@ -451,7 +451,7 @@ def plot_suptopic_comparisons(df, palette='Reds_r', title_prefix='', show=True):
         plt.show()
     plt.close()
 
-def yelp_star_rounding(stars):
+def yelp_star_rounder(stars):
     '''
         Yelp review stars are calculated by rounding the
         average review scroe up to the nearest 0.5 so here
@@ -465,6 +465,12 @@ def yelp_star_rounding(stars):
 
     return result
 
-
+def print_restaurant_summary(restaurants, bid):
+    info = get_business_information(restaurants, bid)
+    for k, v in info.items():
+        if k in list(info.keys())[-9:]:
+            print('{:18}{}'.format(k.replace('_', ' ').title(), yelp_star_rounder(v)))
+        else:
+            print('{:18}{}'.format(k.replace('_', ' ').title(), v))
 
 # EOF
