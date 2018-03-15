@@ -446,7 +446,7 @@ def plot_suptopic_comparisons(df, palette='Reds_r', title_prefix='', show=True):
     plt.suptitle('{} Subtopic Rating Review'.format(title_prefix.title().title()), size=25, weight='bold', y=0.90)
 
     if DO_WRITE_CHARTS:
-        plt.savefig('../charts/reports/subtopic_review_{}.png'.format(title_prefix.replace(' ', '_').lower()))
+        plt.savefig('../charts/subtopic_review_{}.png'.format(title_prefix.replace(' ', '_').lower()))
     if show:
         plt.show()
     plt.close()
