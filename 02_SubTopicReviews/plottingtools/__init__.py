@@ -21,7 +21,7 @@ TITLE_FONT_SIZE = 25
 LABEL_FONT_SIZE = 15
 TICK_FONT_SIZE  = 15
 
-FIG_SIZE = (15,6)
+FIG_SIZE = (15,10)
 
 DO_WRITE_CHARTS = True
 
@@ -110,9 +110,6 @@ def time_marker(text=''):
     print('[{}] {}'.format(datetime.datetime.now().time(), text.strip()))
 
 
-
-
-
 #-----------------------------------------------------------------------------#
 #                                                                             #
 #               Plotting Tools!                                               #
@@ -132,7 +129,7 @@ def get_business_information(df, business_id):
 def compare_to_chain(df, bid, biz_subtopics, min_reviews=10, min_biz=5, show=True):
     '''
         when passed a dataframe of reviews, collect ratings from all other businesses with the same name.
-        Plot in red dots, the reviews in each Sub Category for each location.
+        Plot in red dots, the reviews in each Sub Topic for each location.
     '''
 
     business_information = get_business_information(biz_subtopics, bid)
@@ -161,7 +158,7 @@ def compare_to_chain(df, bid, biz_subtopics, min_reviews=10, min_biz=5, show=Tru
 
 
     # Plotting!
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15,10))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=FIG_SIZE)
 
 
     ax1 = plt.subplot(1, 10, (1,9))
@@ -188,7 +185,7 @@ def compare_to_chain(df, bid, biz_subtopics, min_reviews=10, min_biz=5, show=Tru
     ax1.set_title('Compared to all other {} Restaurants'.format(business_information['name']), size=LABEL_FONT_SIZE)
 
     ax1.set_ylabel('Rating', size=LABEL_FONT_SIZE)
-    ax1.set_xlabel('Review Category', size=LABEL_FONT_SIZE)
+    ax1.set_xlabel('Review Sub Topic', size=LABEL_FONT_SIZE)
     ax1.set_xticklabels([x.replace('_', ' ').title() for x in biz_subtopics.columns[-9:]], size=12)
     ax1.set_yticks([(x/2)+1 for x in range(0, 9)])
 
@@ -213,7 +210,7 @@ def compare_to_chain(df, bid, biz_subtopics, min_reviews=10, min_biz=5, show=Tru
     ax2.set_yticklabels([])
     ax2.set_xticklabels(['Yelp Stars'], size=12, weight='bold')
 
-    file_path = '../charts/reports/chain/{}_{}_chain_comparison.png'.format(business_information['chain_name'].replace('_',''), bid)
+    file_path = '../charts/reports/{}_{}_chain_comparison.png'.format(business_information['chain_name'].replace('_',''), bid)
     if DO_WRITE_CHARTS:
         plt.savefig(file_path)
     if show:
@@ -257,7 +254,7 @@ def compare_to_zipcode(df, bid, biz_subtopics, min_reviews=10, min_biz=5, show=T
 
 
     # Plotting!
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15,10))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=FIG_SIZE)
 
 
     ax1 = plt.subplot(1, 10, (1,9))
@@ -284,7 +281,7 @@ def compare_to_zipcode(df, bid, biz_subtopics, min_reviews=10, min_biz=5, show=T
     ax1.set_title('Compared to all other Restaurants in Zip Code {}'.format(int(business_information['postal_code'])), size=LABEL_FONT_SIZE)
 
     ax1.set_ylabel('Rating', size=LABEL_FONT_SIZE)
-    ax1.set_xlabel('Review Category', size=LABEL_FONT_SIZE)
+    ax1.set_xlabel('Review Sub Topic', size=LABEL_FONT_SIZE)
     ax1.set_xticklabels([x.replace('_', ' ').title() for x in biz_subtopics.columns[-9:]], size=12)
     ax1.set_yticks([(x/2)+1 for x in range(0, 9)])
 
@@ -309,7 +306,7 @@ def compare_to_zipcode(df, bid, biz_subtopics, min_reviews=10, min_biz=5, show=T
     ax2.set_yticklabels([])
     ax2.set_xticklabels(['Yelp Stars'], size=12, weight='bold')
 
-    file_path = '../charts/reports/zipcode/{}_{}_zipcode_comparison.png'.format(business_information['chain_name'].replace('_',''), bid)
+    file_path = '../charts/reports/{}_{}_zipcode_comparison.png'.format(business_information['chain_name'].replace('_',''), bid)
     if DO_WRITE_CHARTS:
         plt.savefig(file_path)
 
@@ -353,7 +350,7 @@ def compare_to_cuisine(df, cuisine, bid, bid_df, biz_subtopics, min_reviews=10, 
 
 
     # Plotting!
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15,10))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=FIG_SIZE)
 
 
     ax1 = plt.subplot(1, 10, (1,9))
@@ -384,7 +381,7 @@ def compare_to_cuisine(df, cuisine, bid, bid_df, biz_subtopics, min_reviews=10, 
         ax1.set_title('Compared to all other Fast Food Restaurants serving {} Cuisine'.format(cuisine.replace('_', ' ').title()), size=LABEL_FONT_SIZE)
 
     ax1.set_ylabel('Rating', size=LABEL_FONT_SIZE)
-    ax1.set_xlabel('Review Category', size=LABEL_FONT_SIZE)
+    ax1.set_xlabel('Review Sub Topic', size=LABEL_FONT_SIZE)
     ax1.set_xticklabels([x.replace('_', ' ').title() for x in biz_subtopics.columns[-9:]], size=12)
     ax1.set_yticks([(x/2)+1 for x in range(0, 9)])
 
@@ -410,7 +407,7 @@ def compare_to_cuisine(df, cuisine, bid, bid_df, biz_subtopics, min_reviews=10, 
     ax2.set_yticklabels([])
     ax2.set_xticklabels(['Yelp Stars'], size=12, weight='bold')
 
-    file_path = '../charts/reports/cuisine/{}_{}_cuisine_comparison_{}.png'.format(business_information['chain_name'].replace('_',''), bid, file_suffix).replace('_.png', '.png')
+    file_path = '../charts/reports/{}_{}_cuisine_comparison_{}.png'.format(business_information['chain_name'].replace('_',''), bid, file_suffix).replace('_.png', '.png')
     if DO_WRITE_CHARTS:
         plt.savefig(file_path)
 
