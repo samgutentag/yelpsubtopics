@@ -11,6 +11,7 @@ This processing took nearly 13 hours to complete on a 2010 MacBook Pro, so pleas
 ## Identified Sub Topics
 The following 50 topics were identified by the LDA model.  Topics Highlighted were selected as Most important and used to define Sub Topic Review Categories.
 
+```
  0 ['dessert', 'wine', 'ice', 'cream', 'cake', 'entree', 'meal', 'chocolate', 'course', 'appetizer']
 ::1 ['time', 'back', 'first', 'try', 'place', 'went', 'definitely', 'go', 'next', 'great']::
 2 ['u', 'table', 'came', 'server', 'food', 'drink', 'waitress', 'asked', 'ordered', 'minute']
@@ -61,7 +62,7 @@ The following 50 topics were identified by the LDA model.  Topics Highlighted we
 47 ['night', 'dinner', 'last', 'party', 'friday', 'went', 'reservation', 'birthday', 'group', 'saturday']
 48 ['thai', 'tea', 'spicy', 'curry', 'pad', 'tofu', 'iced', 'dish', 'spice', 'rice']
 49 ['grill', 'cookie', 'hawaiian', 'cooky', 'mini', 'macaroni', 'island', 'paradise', 'scoop', 'nugget']
-
+```
 
 
 ![Subtopic Ratings](charts/subtopic_review_all_restaurants.png)
