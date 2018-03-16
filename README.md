@@ -9,7 +9,7 @@ Text was tokenized and lemmatized, so that we retained complete English readable
 This processing took nearly 13 hours to complete on a 2010 MacBook Pro, so please take that into consideration when attempting to recreate these results.
 
 ## Identified Sub Topics
-The following 50 topics were identified by the LDA model.  Topics Highlighted were selected as Most important and used to define Sub Topic Review Categories.
+The resulting 50 topics identified by the LDA model were pruned 12 Topics which condensed down to 9 Review Sub Topics.  Identified Topics that were not considered for Sub Topic Ratings included Topics consisting of mostly cuisine specific items, and were topics addressing the type of restaurant, for example ['chicken', 'fried', 'kentucky', 'wings', ...]
 
 ```
 retention
