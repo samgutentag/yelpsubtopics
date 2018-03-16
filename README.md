@@ -8,18 +8,19 @@ Clone this repo to get started.  From there, if you are using `conda` to manage 
 # conda env create environment.yml
 ```
 
-### Prerequisites
-
+## Prerequisites
 There are a few steps involved in getting `nltk` and `spacy`  up and running.
 
 Run the following commands from the command line to install the NLTK and spaCy package resources needed.  For more documentation on spaCy, follow [this link](https://spacy.io/usage/)
+
 ```
 # python -m nltk.downloader all
 # python -m spacy download en
 ```
 
+## Results
 
-## Running the tests
+
 
 Explain how to run the automated tests for this system
 
@@ -39,36 +40,20 @@ Explain what these tests test and why
 Give an example
 ```
 
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
 ## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
+* [pandas](https://pandas.pydata.org) - Python Data Analysis Library
+* [matplotlib](https://matplotlib.org) - Python Plotting Library
+* [seaborn](https://seaborn.pydata.org) - statistical data visualization
+* [nltk](http://www.nltk.org/) - a suite of libraries and programs for symbolic and statistical natural language processing for English text
+* [gensim](https://rometools.github.io/rome/) - Topic Modeling for humans
+* [spaCy](https://spacy.io) - Industrial-Strength Natural Language Processing
 
 ## Authors
+* **Sam Gutentag** - *Initial work* - [samgutentag](www.samgutentag.com)
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+See other projects by Sam on [Github](https://github.com/samgutentag)
 
 ## Acknowledgments
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+* The [Yelp Open Data Set](https://www.yelp.com/dataset)
+* [Simon Worgan](https://www.linkedin.com/in/simon-worgan-44613138/)
+* [Springboard](www.springboard.com)
