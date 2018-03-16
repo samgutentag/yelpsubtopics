@@ -407,7 +407,7 @@ def compare_to_cuisine(df, cuisine, bid, bid_df, biz_subtopics, min_reviews=10, 
     ax2.set_yticklabels([])
     ax2.set_xticklabels(['Yelp Stars'], size=12, weight='bold')
 
-    file_path = '../charts/reports/{}_{}_cuisine_comparison_{}.png'.format(business_information['chain_name'].replace('_',''), bid, file_suffix).replace('_.png', '.png')
+    file_path = '../charts/reports/{}_{}_cuisine_{}_comparison_{}.png'.format(business_information['chain_name'].replace('_',''), bid, cuisine.replace('_', ' ').lower(), file_suffix).replace('_.png', '.png')
     if DO_WRITE_CHARTS:
         plt.savefig(file_path)
 
