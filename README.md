@@ -1,6 +1,12 @@
 # Extracting Sub Topic Ratings from Yelp Review Text
 This project leverages Latent Dirichlet Allocation (LDA) from the `gensim` library  to extract topics from the 496,000 Yelp Reviews given to 7066 Restaurants in the State of Arizona.
 
+# Results
+
+
+# Reproduce my Work
+Few simple steps to get started and reproduce my work.
+
 ## Getting Started
 Clone this repo to get started.  From there, if you are using `conda` to manage your virtual environment, run the following command to setup the environment and install the needed packages.  Be sure to pass the included `environment.yml` file.
 
@@ -18,26 +24,41 @@ Run the following commands from the command line to install the NLTK and spaCy p
 # python -m spacy download en
 ```
 
-## Results
+Lastly, the data used for this project is supplied by the [Yelp Open Dataset](https://www.yelp.com/dataset).  You will need to download a copy of the source data and store it in a directory called `source_data` to run these notebooks without making changes to any code.
 
-
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+The starter directory structure should look like this:
 
 ```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
+yelpsubtopics
+| -README.md
+| -environment.yml
+| -.gitignore
+| -models
+| -clean_data
+| -source_data
+|   |- business.json
+|   |- review.json
+| -documents
+| -DataWrangling
+|   |- 00_Business_Data_Wrangling.ipynb
+|   |- 01_Review_Wrangling.ipynb
+| -TopicModelling
+|   |- model_03a_all_reviews_nouns.ipynb
+|   |- model_05_all_reviews.ipynb
+|   |- model_02_nff_reviews.ipynb
+|   |- MODEL_SUMMARY.ipynb
+|   |- model_01_ff_reviews.ipynb
+|   |- model_04_all_reviews_nouns_verbs.ipynb
+| -SubTopicReviews
+|   |- SubTopicTagging_Model5.ipynb
+|   |- SubTopic_Investigation.ipynb
+|   |- plottingtools
+|       |- init__.py
+| -scripts
+|   |- clean_checkins.py
+|   |- clean_users.py
+| -charts
+|   |- reports
 ```
 
 ## Built With
