@@ -2,7 +2,7 @@
 This project leverages Latent Dirichlet Allocation (LDA) from the `gensim` library  to extract topics from the 496,000 Yelp Reviews given to 7066 Restaurants in the State of Arizona.
 
 # Results
-![Subtopic Ratings](yelpsubtopics/charts/subtopic_review_all_restaurants.png)
+![Subtopic Ratings](charts/subtopic_review_all_restaurants.png)
 
 
 
