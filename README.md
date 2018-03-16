@@ -70,7 +70,7 @@ The comparison report includes information on the specified Restaurant as compar
 * All Other Restaurants Serving a Similar Cuisine (Non Fast Food Locations Only)
 
 ![All Other Subway Restaurants](charts/reports/subway_Gfa85o6JuT9uBqi9fqC-UA_chain_comparison.png)
-![All Other Restaurants in the Same Zip Code](charts/reports/subway_Gfa85o6JuT9uBqi9fqC-UA_zicode_comparison.png)
+![All Other Restaurants in the Same Zip Code](charts/reports/subway_Gfa85o6JuT9uBqi9fqC-UA_zipcode_comparison.png)
 ![All Other Restaurants Serving a Similar Cuisine](charts/reports/subway_Gfa85o6JuT9uBqi9fqC-UA_cuisine_comparison_ff.png)
 ![All Other Restaurants Serving a Similar Cuisine (Fast Food Locations Only)](charts/reports/subway_Gfa85o6JuT9uBqi9fqC-UA_cuisine_comparison_nff.png)
 ![All Other Restaurants Serving a Similar Cuisine (Non Fast Food Locations Only)](charts/reports/subway_Gfa85o6JuT9uBqi9fqC-UA_cuisine_comparison.png)
